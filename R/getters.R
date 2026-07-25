@@ -91,3 +91,52 @@ get_arm_names <- function(input) {
   }
 }
 
+#' @title Getter for state costs
+#' @param input A list of model parameters.
+#' @param arm Optional treatment arm name (character) or index.
+#' @return A vector of state costs for the specified arm, or the full cost matrix if arm is NULL.
+#' @examples
+#' data(test_data)
+#' get_state_costs(test_data, "without_drug")
+#' @export
+get_state_costs <- function(input, arm = NULL) {
+  if (is.null(arm)) {
+    input$state_c_matrix
+  } else {
+    input$state_c_matrix[arm, ]
+  }
+}
+
+#' @title Getter for state utilities
+#' @param input A list of model parameters.
+#' @param arm Optional treatment arm name (character) or index.
+#' @return A vector of state utilities for the specified arm, or the full utility matrix if arm is NULL.
+#' @examples
+#' data(test_data)
+#' get_state_utilities(test_data, "without_drug")
+#' @export
+get_state_utilities <- function(input, arm = NULL) {
+  if (is.null(arm)) {
+    input$state_q_matrix
+  } else {
+    input$state_q_matrix[arm, ]
+  }
+}
+
+#' @title Getter for transition probability matrix
+#' @param input A list of model parameters.
+#' @param arm Optional treatment arm name (character) or index.
+#' @return A matrix of transition probabilities for the specified arm, or the 3D array if arm is NULL.
+#' @examples
+#' data(test_data)
+#' get_transition_matrix(test_data, "without_drug")
+#' @export
+get_transition_matrix <- function(input, arm = NULL) {
+  if (is.null(arm)) {
+    input$p_matrix
+  } else {
+    input$p_matrix[, , arm]
+  }
+}
+
+

@@ -20,6 +20,9 @@
 <url><loc>https://validate-hta.github.io/testhta/reference/get_incremental_qalys.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/get_le.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/get_qalys.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/get_state_costs.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/get_state_utilities.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/get_transition_matrix.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/index.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/p_matrix_cycle.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/run_model.html</loc></url>

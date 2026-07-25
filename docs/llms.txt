@@ -190,8 +190,8 @@ model boundaries.
 
 ## Model Setters & Getters
 
-Helper functions to modify input parameters, compare treatment arms, and
-extract outcomes during test execution.
+Helper functions to modify input parameters, query parameter matrices by
+treatment arm, and extract outcomes during test execution.
 
 - [`set_discount_rate()`](https://validate-hta.github.io/testhta/reference/set_discount_rate.md)
   : Set discount rate
@@ -203,10 +203,12 @@ extract outcomes during test execution.
   : Set utilities for a scenario
 - [`set_time_horizon()`](https://validate-hta.github.io/testhta/reference/set_time_horizon.md)
   : Set time horizon
-- [`equalize_arm_params()`](https://validate-hta.github.io/testhta/reference/equalize_arm_params.md)
-  : Equalize treatment-specific parameters across arms
-- [`swap_arm_params()`](https://validate-hta.github.io/testhta/reference/swap_arm_params.md)
-  : Swap treatment-specific parameters between two arms
+- [`get_state_costs()`](https://validate-hta.github.io/testhta/reference/get_state_costs.md)
+  : Getter for state costs
+- [`get_state_utilities()`](https://validate-hta.github.io/testhta/reference/get_state_utilities.md)
+  : Getter for state utilities
+- [`get_transition_matrix()`](https://validate-hta.github.io/testhta/reference/get_transition_matrix.md)
+  : Getter for transition probability matrix
 - [`get_qalys()`](https://validate-hta.github.io/testhta/reference/get_qalys.md)
   : Getter for QALYs
 - [`get_costs()`](https://validate-hta.github.io/testhta/reference/get_costs.md)

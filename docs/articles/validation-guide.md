@@ -127,26 +127,33 @@ compare_model_runs(
 ### Treatment Arm & Symmetry Tests
 
 To verify that treatment arms behave symmetrically and parameter wiring
-is valid:
+is valid using parameter-level getters and setters:
 
 ``` r
 
 # T14: Equal inputs produce equal outputs across treatment arms
-state_c_eq <- test_data$state_c_matrix
-state_c_eq["with_drug", ] <- state_c_eq["without_drug", ]
+data_eq <- test_data |>
+  set_costs("with_drug", get_state_costs(test_data, "without_drug")) |>
+  set_utilities("with_drug", get_state_utilities(test_data, "without_drug")) |>
+  set_p_matrix("with_drug", get_transition_matrix(test_data, "without_drug"))
 
-state_q_eq <- test_data$state_q_matrix
-state_q_eq["with_drug", ] <- state_q_eq["without_drug", ]
-
-res_eq <- run_model(test_data, state_c_matrix = state_c_eq, state_q_matrix = state_q_eq)
+res_eq <- run_model(data_eq)
 expect_equal(get_costs(res_eq)["with_drug"], get_costs(res_eq)["without_drug"])
 
 # T16: Swapping parameters between arms swaps output outcomes
-state_c_swap <- test_data$state_c_matrix
-state_c_swap[c("without_drug", "with_drug"), ] <- state_c_swap[c("with_drug", "without_drug"), ]
+arm1 <- "without_drug"
+arm2 <- "with_drug"
 
-res_swapped <- run_model(test_data, state_c_matrix = state_c_swap)
-expect_equal(get_costs(res_swapped)["without_drug"], get_costs(run_model(test_data))["with_drug"])
+data_swapped <- test_data |>
+  set_costs(arm1, get_state_costs(test_data, arm2)) |>
+  set_costs(arm2, get_state_costs(test_data, arm1)) |>
+  set_utilities(arm1, get_state_utilities(test_data, arm2)) |>
+  set_utilities(arm2, get_state_utilities(test_data, arm1)) |>
+  set_p_matrix(arm1, get_transition_matrix(test_data, arm2)) |>
+  set_p_matrix(arm2, get_transition_matrix(test_data, arm1))
+
+res_swapped <- run_model(data_swapped)
+expect_equal(get_costs(res_swapped)[arm1], get_costs(run_model(test_data))[arm2])
 ```
 
 ### Probabilistic (PSA) Parameter Sampling Tests

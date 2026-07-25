@@ -158,7 +158,11 @@ test_that("T13 (PSA): Sampled parameters lie within valid statistical distributi
 # --- Treatment Arm & Symmetry Validation Tests (T14 - T16) ---
 
 test_that("T14 (Treatment Arm): Equalizing arm parameters yields equal costs and QALYs across arms", {
-  data_eq <- equalize_arm_params(test_data, from_arm = "without_drug", to_arm = "with_drug")
+  data_eq <- test_data |>
+    set_costs("with_drug", get_state_costs(test_data, "without_drug")) |>
+    set_utilities("with_drug", get_state_utilities(test_data, "without_drug")) |>
+    set_p_matrix("with_drug", get_transition_matrix(test_data, "without_drug"))
+  
   res_eq <- run_model(data_eq)
   
   expect_equal(
@@ -176,15 +180,15 @@ test_that("T14 (Treatment Arm): Equalizing arm parameters yields equal costs and
 })
 
 test_that("T15 (Treatment Arm): Amending individual treatment arm parameter changes ICER", {
-  state_q_mod <- test_data$state_q_matrix
-  state_q_mod["with_drug", "Progressive_disease"] <- 0.8
+  u_with_drug <- get_state_utilities(test_data, "with_drug")
+  u_with_drug["Progressive_disease"] <- 0.8
   
   compare_model_runs(
     extractor_fn = get_icer,
     comparison_fn = function(val1, val2, label) {
       expect_false(isTRUE(all.equal(val1, val2)), label = label)
     },
-    params_1 = list(state_q_matrix = state_q_mod),
+    params_1 = list(state_q_matrix = set_utilities(test_data, "with_drug", u_with_drug)$state_q_matrix),
     params_2 = list(),
     data = test_data,
     label = "T15: Amending individual arm parameter changes ICER"
@@ -193,35 +197,45 @@ test_that("T15 (Treatment Arm): Amending individual treatment arm parameter chan
 
 test_that("T16 (Treatment Arm): Swapping treatment arm parameters swaps QALYs and costs between arms", {
   arms <- get_arm_names(test_data)
-  data_swapped <- swap_arm_params(test_data, arm1 = arms[1], arm2 = arms[2])
+  arm1 <- arms[1]
+  arm2 <- arms[2]
+  
+  data_swapped <- test_data |>
+    set_costs(arm1, get_state_costs(test_data, arm2)) |>
+    set_costs(arm2, get_state_costs(test_data, arm1)) |>
+    set_utilities(arm1, get_state_utilities(test_data, arm2)) |>
+    set_utilities(arm2, get_state_utilities(test_data, arm1)) |>
+    set_p_matrix(arm1, get_transition_matrix(test_data, arm2)) |>
+    set_p_matrix(arm2, get_transition_matrix(test_data, arm1))
   
   res_base <- run_model(test_data)
   res_swapped <- run_model(data_swapped)
   
   expect_equal(
-    as.numeric(get_costs(res_swapped)[arms[1]]),
-    as.numeric(get_costs(res_base)[arms[2]]),
+    as.numeric(get_costs(res_swapped)[arm1]),
+    as.numeric(get_costs(res_base)[arm2]),
     tolerance = 0.01,
     label = "T16: Swapped costs arm 1 equals baseline arm 2"
   )
   expect_equal(
-    as.numeric(get_costs(res_swapped)[arms[2]]),
-    as.numeric(get_costs(res_base)[arms[1]]),
+    as.numeric(get_costs(res_swapped)[arm2]),
+    as.numeric(get_costs(res_base)[arm1]),
     tolerance = 0.01,
     label = "T16: Swapped costs arm 2 equals baseline arm 1"
   )
   expect_equal(
-    as.numeric(get_qalys(res_swapped)[arms[1]]),
-    as.numeric(get_qalys(res_base)[arms[2]]),
+    as.numeric(get_qalys(res_swapped)[arm1]),
+    as.numeric(get_qalys(res_base)[arm2]),
     tolerance = 0.01,
     label = "T16: Swapped QALYs arm 1 equals baseline arm 2"
   )
   expect_equal(
-    as.numeric(get_qalys(res_swapped)[arms[2]]),
-    as.numeric(get_qalys(res_base)[arms[1]]),
+    as.numeric(get_qalys(res_swapped)[arm2]),
+    as.numeric(get_qalys(res_base)[arm1]),
     tolerance = 0.01,
     label = "T16: Swapped QALYs arm 2 equals baseline arm 1"
   )
 })
+
 
 
