@@ -42,7 +42,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_le</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_le</span><span class="op">(</span><span class="va">res</span>, arm <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -52,10 +52,14 @@
 <dl><dt id="arg-res">res<a class="anchor" aria-label="anchor" href="#arg-res"></a></dt>
 <dd><p>A list of results returned by ce_markov.</p></dd>
 
+
+<dt id="arg-arm">arm<a class="anchor" aria-label="anchor" href="#arg-arm"></a></dt>
+<dd><p>Optional treatment arm name or index.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A numeric vector of total life expectancy by treatment.</p>
+    <p>A numeric vector of total life expectancy by treatment, or a single numeric value if arm is specified.</p>
     </div>
 
     <div class="section level2">
@@ -65,6 +69,9 @@
 <span class="r-in"><span><span class="fu">get_le</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> without_drug    with_drug </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     12.06416     12.68332 </span>
+<span class="r-in"><span><span class="fu">get_le</span><span class="op">(</span><span class="va">res</span>, <span class="st">"with_drug"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> with_drug </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  12.68332 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

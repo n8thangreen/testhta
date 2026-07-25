@@ -4,13 +4,15 @@
 \alias{get_qalys}
 \title{Getter for QALYs}
 \usage{
-get_qalys(res)
+get_qalys(res, arm = NULL)
 }
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
+
+\item{arm}{Optional treatment arm name or index.}
 }
 \value{
-A numeric vector of total QALYs by treatment.
+A numeric vector of total QALYs by treatment, or a single numeric value if arm is specified.
 }
 \description{
 Getter for QALYs
@@ -19,4 +21,5 @@ Getter for QALYs
 data(test_data)
 res <- run_model(test_data)
 get_qalys(res)
+get_qalys(res, "with_drug")
 }

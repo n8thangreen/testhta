@@ -5,7 +5,7 @@ Getter for costs
 ## Usage
 
 ``` r
-get_costs(res)
+get_costs(res, arm = NULL)
 ```
 
 ## Arguments
@@ -14,9 +14,14 @@ get_costs(res)
 
   A list of results returned by ce_markov.
 
+- arm:
+
+  Optional treatment arm name or index.
+
 ## Value
 
-A numeric vector of total costs by treatment.
+A numeric vector of total costs by treatment, or a single numeric value
+if arm is specified.
 
 ## Examples
 
@@ -26,4 +31,7 @@ res <- run_model(test_data)
 get_costs(res)
 #> without_drug    with_drug 
 #>     9205.744    16977.576 
+get_costs(res, "with_drug")
+#> with_drug 
+#>  16977.58 
 ```

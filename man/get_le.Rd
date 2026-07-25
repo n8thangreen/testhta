@@ -4,13 +4,15 @@
 \alias{get_le}
 \title{Getter for life expectancy (LE)}
 \usage{
-get_le(res)
+get_le(res, arm = NULL)
 }
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
+
+\item{arm}{Optional treatment arm name or index.}
 }
 \value{
-A numeric vector of total life expectancy by treatment.
+A numeric vector of total life expectancy by treatment, or a single numeric value if arm is specified.
 }
 \description{
 Getter for life expectancy (LE)
@@ -19,4 +21,5 @@ Getter for life expectancy (LE)
 data(test_data)
 res <- run_model(test_data)
 get_le(res)
+get_le(res, "with_drug")
 }

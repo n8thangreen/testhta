@@ -2,77 +2,104 @@
 
 #' @title Getter for QALYs
 #' @param res A list of results returned by ce_markov.
-#' @return A numeric vector of total QALYs by treatment.
+#' @param arm Optional treatment arm name or index.
+#' @return A numeric vector of total QALYs by treatment, or a single numeric value if arm is specified.
 #' @examples
 #' data(test_data)
 #' res <- run_model(test_data)
 #' get_qalys(res)
+#' get_qalys(res, "with_drug")
 #' @export
-get_qalys <- function(res) {
-  res$total_QALYs
+get_qalys <- function(res, arm = NULL) {
+  if (is.null(arm)) {
+    res$total_QALYs
+  } else {
+    res$total_QALYs[arm]
+  }
 }
 
 #' @title Getter for costs
 #' @param res A list of results returned by ce_markov.
-#' @return A numeric vector of total costs by treatment.
+#' @param arm Optional treatment arm name or index.
+#' @return A numeric vector of total costs by treatment, or a single numeric value if arm is specified.
 #' @examples
 #' data(test_data)
 #' res <- run_model(test_data)
 #' get_costs(res)
+#' get_costs(res, "with_drug")
 #' @export 
-get_costs <- function(res) {
-  res$total_costs
+get_costs <- function(res, arm = NULL) {
+  if (is.null(arm)) {
+    res$total_costs
+  } else {
+    res$total_costs[arm]
+  }
 }
 
 #' @title Getter for life expectancy (LE)
 #' @param res A list of results returned by ce_markov.
-#' @return A numeric vector of total life expectancy by treatment.
+#' @param arm Optional treatment arm name or index.
+#' @return A numeric vector of total life expectancy by treatment, or a single numeric value if arm is specified.
 #' @examples
 #' data(test_data)
 #' res <- run_model(test_data)
 #' get_le(res)
+#' get_le(res, "with_drug")
 #' @export
-get_le <- function(res) {
-  res$total_LE
+get_le <- function(res, arm = NULL) {
+  if (is.null(arm)) {
+    res$total_LE
+  } else {
+    res$total_LE[arm]
+  }
 }
 
 #' @title Getter for ICER
 #' @param res A list of results returned by ce_markov.
+#' @param arm1 Baseline treatment arm name or index (default: "without_drug").
+#' @param arm2 Comparator treatment arm name or index (default: "with_drug").
 #' @return A numeric value representing the incremental cost-effectiveness ratio (ICER).
 #' @examples
 #' data(test_data)
 #' res <- run_model(test_data)
 #' get_icer(res)
 #' @export
-get_icer <- function(res) {
-  c_incr <- res$total_costs["with_drug"] - res$total_costs["without_drug"]
-  q_incr <- res$total_QALYs["with_drug"] - res$total_QALYs["without_drug"]
+get_icer <- function(res, arm1 = "without_drug", arm2 = "with_drug") {
+  c_incr <- get_incremental_costs(res, arm1 = arm1, arm2 = arm2)
+  q_incr <- get_incremental_qalys(res, arm1 = arm1, arm2 = arm2)
   as.numeric(c_incr / q_incr)
 }
 
 #' @title Getter for incremental costs
 #' @param res A list of results returned by ce_markov.
+#' @param arm1 Baseline treatment arm name or index (default: "without_drug").
+#' @param arm2 Comparator treatment arm name or index (default: "with_drug").
 #' @return A numeric value of incremental cost (arm 2 minus arm 1).
 #' @examples
 #' data(test_data)
 #' res <- run_model(test_data)
 #' get_incremental_costs(res)
 #' @export
-get_incremental_costs <- function(res) {
-  res$total_costs["with_drug"] - res$total_costs["without_drug"]
+get_incremental_costs <- function(res, arm1 = "without_drug", arm2 = "with_drug") {
+  costs <- get_costs(res)
+  as.numeric(costs[arm2] - costs[arm1])
 }
 
 #' @title Getter for incremental QALYs
 #' @param res A list of results returned by ce_markov.
+#' @param arm1 Baseline treatment arm name or index (default: "without_drug").
+#' @param arm2 Comparator treatment arm name or index (default: "with_drug").
 #' @return A numeric value of incremental QALYs (arm 2 minus arm 1).
 #' @examples
 #' data(test_data)
 #' res <- run_model(test_data)
 #' get_incremental_qalys(res)
 #' @export
-get_incremental_qalys <- function(res) {
-  res$total_QALYs["with_drug"] - res$total_QALYs["without_drug"]
+get_incremental_qalys <- function(res, arm1 = "without_drug", arm2 = "with_drug") {
+  qalys <- get_qalys(res)
+  as.numeric(qalys[arm2] - qalys[arm1])
 }
+
 
 #' @title Getter for treatment arm names
 #' @param input A list of parameters or model results.

@@ -4,13 +4,15 @@
 \alias{get_costs}
 \title{Getter for costs}
 \usage{
-get_costs(res)
+get_costs(res, arm = NULL)
 }
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
+
+\item{arm}{Optional treatment arm name or index.}
 }
 \value{
-A numeric vector of total costs by treatment.
+A numeric vector of total costs by treatment, or a single numeric value if arm is specified.
 }
 \description{
 Getter for costs
@@ -19,4 +21,5 @@ Getter for costs
 data(test_data)
 res <- run_model(test_data)
 get_costs(res)
+get_costs(res, "with_drug")
 }

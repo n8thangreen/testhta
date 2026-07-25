@@ -4,10 +4,14 @@
 \alias{get_icer}
 \title{Getter for ICER}
 \usage{
-get_icer(res)
+get_icer(res, arm1 = "without_drug", arm2 = "with_drug")
 }
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
+
+\item{arm1}{Baseline treatment arm name or index (default: "without_drug").}
+
+\item{arm2}{Comparator treatment arm name or index (default: "with_drug").}
 }
 \value{
 A numeric value representing the incremental cost-effectiveness ratio (ICER).
