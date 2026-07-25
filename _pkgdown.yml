@@ -29,17 +29,22 @@ reference:
       - check_model_le
       - compare_model_runs
   - title: "Model Setters & Getters"
-    desc: "Helper functions to modify input parameters and extract outcomes during test execution."
+    desc: "Helper functions to modify input parameters, compare treatment arms, and extract outcomes during test execution."
     contents:
       - set_discount_rate
       - set_costs
       - set_p_matrix
       - set_utilities
       - set_time_horizon
+      - equalize_arm_params
+      - swap_arm_params
       - get_qalys
       - get_costs
       - get_le
       - get_icer
+      - get_incremental_costs
+      - get_incremental_qalys
+      - get_arm_names
   - title: "Example Case Study Model"
     desc: "The cohort Markov model engine used as the demonstration environment for these testing tools."
     contents:

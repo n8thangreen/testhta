@@ -94,3 +94,52 @@ set_time_horizon <- function(input, scenario, values) {
   }
   input
 }
+
+#' Equalize treatment-specific parameters across arms
+#'
+#' @param input A list of model parameters.
+#' @param from_arm The source arm name or index.
+#' @param to_arm The target arm name or index.
+#' @return The modified list of parameters with identical inputs for both arms.
+#' @examples
+#' data(test_data)
+#' updated <- equalize_arm_params(test_data, "without_drug", "with_drug")
+#' @export
+equalize_arm_params <- function(input, from_arm = "without_drug", to_arm = "with_drug") {
+  if (!is.list(input)) {
+    stop("input must be a list")
+  }
+  input$state_c_matrix[to_arm, ] <- input$state_c_matrix[from_arm, ]
+  input$state_q_matrix[to_arm, ] <- input$state_q_matrix[from_arm, ]
+  input$p_matrix[, , to_arm] <- input$p_matrix[, , from_arm]
+  input
+}
+
+#' Swap treatment-specific parameters between two arms
+#'
+#' @param input A list of model parameters.
+#' @param arm1 Name or index of the first treatment arm.
+#' @param arm2 Name or index of the second treatment arm.
+#' @return The modified list of parameters with swapped inputs.
+#' @examples
+#' data(test_data)
+#' updated <- swap_arm_params(test_data, "without_drug", "with_drug")
+#' @export
+swap_arm_params <- function(input, arm1 = "without_drug", arm2 = "with_drug") {
+  if (!is.list(input)) {
+    stop("input must be a list")
+  }
+  # Swap costs
+  input$state_c_matrix[c(arm1, arm2), ] <- input$state_c_matrix[c(arm2, arm1), ]
+  
+  # Swap utilities
+  input$state_q_matrix[c(arm1, arm2), ] <- input$state_q_matrix[c(arm2, arm1), ]
+  
+  # Swap transition matrices
+  p_temp <- input$p_matrix[, , arm1]
+  input$p_matrix[, , arm1] <- input$p_matrix[, , arm2]
+  input$p_matrix[, , arm2] <- p_temp
+  
+  input
+}
+

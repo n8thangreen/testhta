@@ -12,8 +12,12 @@
 <url><loc>https://validate-hta.github.io/testhta/reference/check_model_le.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/check_model_qalys.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/compare_model_runs.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/equalize_arm_params.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/get_arm_names.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/get_costs.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/get_icer.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/get_incremental_costs.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/get_incremental_qalys.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/get_le.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/get_qalys.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/index.html</loc></url>
@@ -24,6 +28,7 @@
 <url><loc>https://validate-hta.github.io/testhta/reference/set_p_matrix.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/set_time_horizon.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/set_utilities.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/swap_arm_params.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/test_data.html</loc></url>
 </urlset>
 

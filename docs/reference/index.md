@@ -18,8 +18,8 @@ model boundaries.
 
 ## Model Setters & Getters
 
-Helper functions to modify input parameters and extract outcomes during
-test execution.
+Helper functions to modify input parameters, compare treatment arms, and
+extract outcomes during test execution.
 
 - [`set_discount_rate()`](https://validate-hta.github.io/testhta/reference/set_discount_rate.md)
   : Set discount rate
@@ -31,6 +31,10 @@ test execution.
   : Set utilities for a scenario
 - [`set_time_horizon()`](https://validate-hta.github.io/testhta/reference/set_time_horizon.md)
   : Set time horizon
+- [`equalize_arm_params()`](https://validate-hta.github.io/testhta/reference/equalize_arm_params.md)
+  : Equalize treatment-specific parameters across arms
+- [`swap_arm_params()`](https://validate-hta.github.io/testhta/reference/swap_arm_params.md)
+  : Swap treatment-specific parameters between two arms
 - [`get_qalys()`](https://validate-hta.github.io/testhta/reference/get_qalys.md)
   : Getter for QALYs
 - [`get_costs()`](https://validate-hta.github.io/testhta/reference/get_costs.md)
@@ -39,6 +43,12 @@ test execution.
   : Getter for life expectancy (LE)
 - [`get_icer()`](https://validate-hta.github.io/testhta/reference/get_icer.md)
   : Getter for ICER
+- [`get_incremental_costs()`](https://validate-hta.github.io/testhta/reference/get_incremental_costs.md)
+  : Getter for incremental costs
+- [`get_incremental_qalys()`](https://validate-hta.github.io/testhta/reference/get_incremental_qalys.md)
+  : Getter for incremental QALYs
+- [`get_arm_names()`](https://validate-hta.github.io/testhta/reference/get_arm_names.md)
+  : Getter for treatment arm names
 
 ## Example Case Study Model
 
