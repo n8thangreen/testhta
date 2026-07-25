@@ -26,6 +26,20 @@ compare_model_runs(
 
 \item{label}{A label for the test, passed to the comparison function.}
 }
+\value{
+None, called for side effects (testthat assertion).
+}
 \description{
 Compare model outputs from two different parameter sets
+}
+\examples{
+library(testthat)
+data(test_data)
+compare_model_runs(
+  extractor_fn = get_qalys,
+  comparison_fn = expect_lt,
+  params_1 = list(discount_rate = 0.035),
+  params_2 = list(discount_rate = 0),
+  data = test_data
+)
 }

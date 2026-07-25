@@ -9,6 +9,14 @@ get_icer(res)
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
 }
+\value{
+A numeric value representing the incremental cost-effectiveness ratio (ICER).
+}
 \description{
 Getter for ICER
+}
+\examples{
+data(test_data)
+res <- run_model(test_data)
+get_icer(res)
 }

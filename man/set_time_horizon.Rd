@@ -19,3 +19,7 @@ The modified list of parameters.
 \description{
 Set time horizon
 }
+\examples{
+data(test_data)
+updated <- set_time_horizon(test_data, 10)
+}

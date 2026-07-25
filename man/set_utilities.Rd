@@ -19,3 +19,7 @@ The modified list of parameters.
 \description{
 Set utilities for a scenario
 }
+\examples{
+data(test_data)
+updated <- set_utilities(test_data, "without_drug", c(0.8, 0.5, 0))
+}

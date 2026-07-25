@@ -19,3 +19,8 @@ The modified list of parameters.
 \description{
 Set transition probabilities for a scenario
 }
+\examples{
+data(test_data)
+mat <- test_data$p_matrix[, , "without_drug"]
+updated <- set_p_matrix(test_data, "without_drug", mat)
+}

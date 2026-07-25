@@ -13,6 +13,13 @@ check_model_qalys(expected_qalys, ..., label = NULL)
 
 \item{label}{A label for the test, passed to \code{expect_equal()}.}
 }
+\value{
+None, called for side effects (testthat assertion).
+}
 \description{
 Run model and check QALYs against an expected value
+}
+\examples{
+data(test_data)
+check_model_qalys(0, data = test_data, u_healthy = 0, u_sick = 0)
 }

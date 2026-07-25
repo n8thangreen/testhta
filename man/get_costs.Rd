@@ -9,6 +9,14 @@ get_costs(res)
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
 }
+\value{
+A numeric vector of total costs by treatment.
+}
 \description{
 Getter for costs
+}
+\examples{
+data(test_data)
+res <- run_model(test_data)
+get_costs(res)
 }

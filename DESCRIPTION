@@ -8,10 +8,13 @@ Description: Provides a validation framework for applying software engineering
     technology assessment (HTA) models. By leveraging the 'testthat' package, 
     it helps modelers verify that cohort Markov models behave as expected 
     under specific mathematical and economic conditions (e.g. discounting, 
-    life expectancy limits, and extreme parameter values).
+    life expectancy limits, and extreme parameter values). It includes automated 
+    assertion helpers for evaluating decision-analytic model outputs.
 License: GPL (>= 3)
-URL: https://n8thangreen.github.io/testhta/
-BugReports: https://github.com/n8thangreen/testhta/issues
+URL: https://validate-hta.github.io/testhta/
+BugReports: https://github.com/validate-hta/testhta/issues
+Depends: 
+    R (>= 3.5.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Imports: 

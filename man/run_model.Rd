@@ -12,8 +12,12 @@ run_model(data, ...)
 \item{...}{Overrides for parameters or helper arguments.}
 }
 \value{
-The model results.
+A list of model simulation results.
 }
 \description{
 Run Markov model with parameters and overrides
+}
+\examples{
+data(test_data)
+res <- run_model(test_data, discount_rate = 0.05)
 }

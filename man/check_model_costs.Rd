@@ -13,6 +13,13 @@ check_model_costs(expected_costs, ..., label = NULL)
 
 \item{label}{A label for the test, passed to \code{expect_equal()}.}
 }
+\value{
+None, called for side effects (testthat assertion).
+}
 \description{
 Run model and check Costs against an expected value
+}
+\examples{
+data(test_data)
+check_model_costs(0, data = test_data, c_healthy = 0, c_sick = 0, c_intervention = 0, c_death = 0)
 }

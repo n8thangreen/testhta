@@ -13,6 +13,9 @@
 #' @param p_sick_death Optional override for transition probability from sick to dead
 #' @param ... Extra arguments
 #' @return The updated transition probability matrix
+#' @examples
+#' data(test_data)
+#' p_mat <- p_matrix_cycle(test_data$p_matrix, age = 55, cycle = 1)
 #' @export
 p_matrix_cycle <- function(p_matrix, age, cycle,
                            tpProg = 0.01,

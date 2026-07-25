@@ -19,3 +19,7 @@ The modified list of parameters.
 \description{
 Set costs for a scenario
 }
+\examples{
+data(test_data)
+updated <- set_costs(test_data, "without_drug", c(100, 200, 0))
+}

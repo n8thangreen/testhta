@@ -13,6 +13,13 @@ check_model_le(expected_le, ..., label = NULL)
 
 \item{label}{A label for the test, passed to \code{expect_equal()}.}
 }
+\value{
+None, called for side effects (testthat assertion).
+}
 \description{
 Run model and check Life Expectancy against an expected value
+}
+\examples{
+data(test_data)
+check_model_le(1, data = test_data, p_healthy_death = 1, p_sick_death = 1)
 }

@@ -15,6 +15,10 @@
 #' @importFrom stats setNames
 #' @return A list containing the population array, total life expectancy, total life-years,
 #' cycle costs, cycle QALYs, total costs, and total QALYs for each treatment
+#' @examples
+#' data(test_data)
+#' res <- do.call(ce_markov, test_data)
+#' res$total_costs
 #' @export
 ce_markov <- function(start_pop,
                       p_matrix,

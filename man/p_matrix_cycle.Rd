@@ -41,3 +41,7 @@ The updated transition probability matrix
 \description{
 Calculates time-dependent transition probabilities for a Markov model
 }
+\examples{
+data(test_data)
+p_mat <- p_matrix_cycle(test_data$p_matrix, age = 55, cycle = 1)
+}

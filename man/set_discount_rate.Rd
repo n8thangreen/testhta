@@ -17,3 +17,7 @@ The modified list of parameters.
 \description{
 Set discount rate
 }
+\examples{
+data(test_data)
+updated <- set_discount_rate(test_data, 0.05)
+}

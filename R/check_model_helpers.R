@@ -3,7 +3,10 @@
 #' @param data A list of base parameters.
 #' @param ... Overrides for parameters or helper arguments.
 #' @importFrom testthat expect_equal
-#' @return The model results.
+#' @return A list of model simulation results.
+#' @examples
+#' data(test_data)
+#' res <- run_model(test_data, discount_rate = 0.05)
 #' @export
 run_model <- function(data, ...) {
   updates <- list(...)
@@ -64,6 +67,10 @@ run_model <- function(data, ...) {
 #' @param expected_qalys The exact expected QALY value.
 #' @param ... Arguments passed to `run_model()` (e.g., data, discount_rate).
 #' @param label A label for the test, passed to `expect_equal()`.
+#' @return None, called for side effects (testthat assertion).
+#' @examples
+#' data(test_data)
+#' check_model_qalys(0, data = test_data, u_healthy = 0, u_sick = 0)
 #' @export
 check_model_qalys <- function(expected_qalys, ..., label = NULL) {
   run <- run_model(...)
@@ -81,6 +88,10 @@ check_model_qalys <- function(expected_qalys, ..., label = NULL) {
 #' @param expected_costs The exact expected Cost value.
 #' @param ... Arguments passed to `run_model()`.
 #' @param label A label for the test, passed to `expect_equal()`.
+#' @return None, called for side effects (testthat assertion).
+#' @examples
+#' data(test_data)
+#' check_model_costs(0, data = test_data, c_healthy = 0, c_sick = 0, c_intervention = 0, c_death = 0)
 #' @export
 check_model_costs <- function(expected_costs, ..., label = NULL) {
   run <- run_model(...)
@@ -98,6 +109,10 @@ check_model_costs <- function(expected_costs, ..., label = NULL) {
 #' @param expected_le The exact expected LE value.
 #' @param ... Arguments passed to `run_model()`.
 #' @param label A label for the test, passed to `expect_equal()`.
+#' @return None, called for side effects (testthat assertion).
+#' @examples
+#' data(test_data)
+#' check_model_le(1, data = test_data, p_healthy_death = 1, p_sick_death = 1)
 #' @export
 check_model_le <- function(expected_le, ..., label = NULL) {
   run <- run_model(...)
@@ -118,6 +133,17 @@ check_model_le <- function(expected_le, ..., label = NULL) {
 #' @param params_2 List of parameters for the second `run_model()` call.
 #' @param data The base dataset (passed as the first argument to `run_model`).
 #' @param label A label for the test, passed to the comparison function.
+#' @return None, called for side effects (testthat assertion).
+#' @examples
+#' library(testthat)
+#' data(test_data)
+#' compare_model_runs(
+#'   extractor_fn = get_qalys,
+#'   comparison_fn = expect_lt,
+#'   params_1 = list(discount_rate = 0.035),
+#'   params_2 = list(discount_rate = 0),
+#'   data = test_data
+#' )
 #' @export
 compare_model_runs <- function(extractor_fn, comparison_fn, 
                                params_1, params_2, data, label = NULL) {

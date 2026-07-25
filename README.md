@@ -1,7 +1,7 @@
 # testhta <img src="man/figures/logo.png" align="right" height="139" alt="testhta logo" style="float:right;" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/n8thangreen/testhta/workflows/R-CMD-check/badge.svg)](https://github.com/n8thangreen/testhta/actions)
+[![R-CMD-check](https://github.com/validate-hta/testhta/workflows/R-CMD-check/badge.svg)](https://github.com/validate-hta/testhta/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Lifecycle: Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->

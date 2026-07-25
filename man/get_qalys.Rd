@@ -9,6 +9,14 @@ get_qalys(res)
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
 }
+\value{
+A numeric vector of total QALYs by treatment.
+}
 \description{
 Getter for QALYs
+}
+\examples{
+data(test_data)
+res <- run_model(test_data)
+get_qalys(res)
 }

@@ -48,3 +48,8 @@ cycle costs, cycle QALYs, total costs, and total QALYs for each treatment
 \description{
 Runs a Markov model to calculate costs, QALYs, and life expectancy for different treatments
 }
+\examples{
+data(test_data)
+res <- do.call(ce_markov, test_data)
+res$total_costs
+}

@@ -9,6 +9,14 @@ get_le(res)
 \arguments{
 \item{res}{A list of results returned by ce_markov.}
 }
+\value{
+A numeric vector of total life expectancy by treatment.
+}
 \description{
 Getter for life expectancy (LE)
+}
+\examples{
+data(test_data)
+res <- run_model(test_data)
+get_le(res)
 }
