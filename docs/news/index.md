@@ -8,41 +8,41 @@
 ### New Features
 
 - Added getters to retrieve cohort simulation metrics:
-  - [`get_costs()`](https://n8thangreen.github.io/testhta/reference/get_costs.md):
+  - [`get_costs()`](https://validate-hta.github.io/testhta/reference/get_costs.md):
     Retrieve total discounted costs.
-  - [`get_icer()`](https://n8thangreen.github.io/testhta/reference/get_icer.md):
+  - [`get_icer()`](https://validate-hta.github.io/testhta/reference/get_icer.md):
     Calculate Incremental Cost-Effectiveness Ratio.
-  - [`get_le()`](https://n8thangreen.github.io/testhta/reference/get_le.md):
+  - [`get_le()`](https://validate-hta.github.io/testhta/reference/get_le.md):
     Retrieve total Life Expectancy.
-  - [`get_qalys()`](https://n8thangreen.github.io/testhta/reference/get_qalys.md):
+  - [`get_qalys()`](https://validate-hta.github.io/testhta/reference/get_qalys.md):
     Retrieve total discounted Quality-Adjusted Life Years.
 - Added piping-compatible setters to dynamically override model
   parameters:
-  - [`set_costs()`](https://n8thangreen.github.io/testhta/reference/set_costs.md):
+  - [`set_costs()`](https://validate-hta.github.io/testhta/reference/set_costs.md):
     Modify state-occupancy costs.
-  - [`set_discount_rate()`](https://n8thangreen.github.io/testhta/reference/set_discount_rate.md):
+  - [`set_discount_rate()`](https://validate-hta.github.io/testhta/reference/set_discount_rate.md):
     Modify model discount rates.
-  - [`set_p_matrix()`](https://n8thangreen.github.io/testhta/reference/set_p_matrix.md):
+  - [`set_p_matrix()`](https://validate-hta.github.io/testhta/reference/set_p_matrix.md):
     Modify transition probability arrays.
-  - [`set_time_horizon()`](https://n8thangreen.github.io/testhta/reference/set_time_horizon.md):
+  - [`set_time_horizon()`](https://validate-hta.github.io/testhta/reference/set_time_horizon.md):
     Modify simulation time horizon.
-  - [`set_utilities()`](https://n8thangreen.github.io/testhta/reference/set_utilities.md):
+  - [`set_utilities()`](https://validate-hta.github.io/testhta/reference/set_utilities.md):
     Modify state-specific utilities.
 
 ### Testing & Validation Helpers
 
 - Added validation test helper assertions for use with the `testthat`
   package:
-  - [`check_model_costs()`](https://n8thangreen.github.io/testhta/reference/check_model_costs.md):
+  - [`check_model_costs()`](https://validate-hta.github.io/testhta/reference/check_model_costs.md):
     Assert expected costs under bounding conditions.
-  - [`check_model_le()`](https://n8thangreen.github.io/testhta/reference/check_model_le.md):
+  - [`check_model_le()`](https://validate-hta.github.io/testhta/reference/check_model_le.md):
     Assert expected life expectancy under bounding conditions.
-  - [`check_model_qalys()`](https://n8thangreen.github.io/testhta/reference/check_model_qalys.md):
+  - [`check_model_qalys()`](https://validate-hta.github.io/testhta/reference/check_model_qalys.md):
     Assert expected QALYs under bounding conditions.
-  - [`compare_model_runs()`](https://n8thangreen.github.io/testhta/reference/compare_model_runs.md):
+  - [`compare_model_runs()`](https://validate-hta.github.io/testhta/reference/compare_model_runs.md):
     Assert directional and logical relationships between two model
     parameter configurations.
-  - [`run_model()`](https://n8thangreen.github.io/testhta/reference/run_model.md):
+  - [`run_model()`](https://validate-hta.github.io/testhta/reference/run_model.md):
     Core parameter-override wrapper for execution of the underlying
     Markov engine.
 

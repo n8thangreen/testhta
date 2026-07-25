@@ -17,7 +17,7 @@ under baseline parameters. 3. Accessing model outputs using getters.
 ## 1. The HTA Markov Model Setup
 
 The core function in `testhta` is
-[`ce_markov()`](https://n8thangreen.github.io/testhta/reference/ce_markov.md),
+[`ce_markov()`](https://validate-hta.github.io/testhta/reference/ce_markov.md),
 which runs a cohort Markov model. The model expects: - `start_pop`:
 Initial counts of the cohort across health states. - `p_matrix`: A
 3-dimensional array of transition probabilities (states $`\times`$
@@ -49,9 +49,9 @@ or 0.035) - `n_cycles`: Time horizon of the model
 ## 2. Running the Model
 
 We can run the model by passing `test_data` parameters directly to
-[`ce_markov()`](https://n8thangreen.github.io/testhta/reference/ce_markov.md),
+[`ce_markov()`](https://validate-hta.github.io/testhta/reference/ce_markov.md),
 or using the wrapper helper
-[`run_model()`](https://n8thangreen.github.io/testhta/reference/run_model.md).
+[`run_model()`](https://validate-hta.github.io/testhta/reference/run_model.md).
 
 Here is how you execute the Markov simulation:
 
@@ -62,7 +62,7 @@ results <- run_model(test_data)
 ```
 
 The output of
-[`run_model()`](https://n8thangreen.github.io/testhta/reference/run_model.md)
+[`run_model()`](https://validate-hta.github.io/testhta/reference/run_model.md)
 is a list containing the population distributions, cycle-specific costs
 and QALYs, and summary metrics.
 
@@ -71,13 +71,13 @@ and QALYs, and summary metrics.
 `testhta` provides clean getter functions to extract the key outcomes
 from your model results:
 
-- [`get_qalys()`](https://n8thangreen.github.io/testhta/reference/get_qalys.md):
+- [`get_qalys()`](https://validate-hta.github.io/testhta/reference/get_qalys.md):
   Extracts total Quality-Adjusted Life Years (QALYs).
-- [`get_costs()`](https://n8thangreen.github.io/testhta/reference/get_costs.md):
+- [`get_costs()`](https://validate-hta.github.io/testhta/reference/get_costs.md):
   Extracts total costs.
-- [`get_le()`](https://n8thangreen.github.io/testhta/reference/get_le.md):
+- [`get_le()`](https://validate-hta.github.io/testhta/reference/get_le.md):
   Extracts total Life Expectancy (undiscounted life-years).
-- [`get_icer()`](https://n8thangreen.github.io/testhta/reference/get_icer.md):
+- [`get_icer()`](https://validate-hta.github.io/testhta/reference/get_icer.md):
   Calculates the Incremental Cost-Effectiveness Ratio (ICER) between the
   two arms.
 

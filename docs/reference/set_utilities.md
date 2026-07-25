@@ -25,3 +25,10 @@ set_utilities(input, scenario, values)
 ## Value
 
 The modified list of parameters.
+
+## Examples
+
+``` r
+data(test_data)
+updated <- set_utilities(test_data, "without_drug", c(0.8, 0.5, 0))
+```

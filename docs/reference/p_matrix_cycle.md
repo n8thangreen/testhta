@@ -60,3 +60,10 @@ p_matrix_cycle(
 ## Value
 
 The updated transition probability matrix
+
+## Examples
+
+``` r
+data(test_data)
+p_mat <- p_matrix_cycle(test_data$p_matrix, age = 55, cycle = 1)
+```

@@ -72,3 +72,13 @@ ce_markov(
 A list containing the population array, total life expectancy, total
 life-years, cycle costs, cycle QALYs, total costs, and total QALYs for
 each treatment
+
+## Examples
+
+``` r
+data(test_data)
+res <- do.call(ce_markov, test_data)
+res$total_costs
+#> without_drug    with_drug 
+#>     9205.744    16977.576 
+```

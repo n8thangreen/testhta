@@ -11,7 +11,7 @@ whether a model behaves correctly under extreme or “boundary” conditions
 where the mathematical output is known *a priori*.
 
 Unlike relational tests (which compare two different runs using
-[`compare_model_runs()`](https://n8thangreen.github.io/testhta/reference/compare_model_runs.md)),
+[`compare_model_runs()`](https://validate-hta.github.io/testhta/reference/compare_model_runs.md)),
 basic bounding tests assert model outputs against a single, static
 expected value (e.g. checking that costs are exactly 0 when unit costs
 are 0, or that QALYs are 0 under 100% discounting).

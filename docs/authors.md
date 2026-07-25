@@ -7,16 +7,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/n8thangreen/testhta/blob/HEAD/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/validate-hta/testhta/blob/HEAD/DESCRIPTION)
 
 Green N (2026). *testhta: Validate Cost-Effectiveness and
 Decision-Analytic Models*. R package version 0.1.0,
-<https://n8thangreen.github.io/testhta/>.
+<https://validate-hta.github.io/testhta/>.
 
     @Manual{,
       title = {testhta: Validate Cost-Effectiveness and Decision-Analytic Models},
       author = {Nathan Green},
       year = {2026},
       note = {R package version 0.1.0},
-      url = {https://n8thangreen.github.io/testhta/},
+      url = {https://validate-hta.github.io/testhta/},
     }

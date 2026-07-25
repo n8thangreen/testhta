@@ -37,6 +37,12 @@ Several logical rules must hold true for any cost-effectiveness model. `testhta`
 - **Utility Bounding**: If state utilities are set to 0, total QALYs must equal 0. If state utilities are set to 1 and the discount rate is 0, total QALYs must exactly equal life expectancy.
 - **Life Expectancy Consistency**: Life expectancy should not be affected by changes to cost or utility values, nor should it change with the discount rate.
 - **Absorbing States**: If transition probabilities to the death state are 1, life expectancy must be exactly 1 cycle. If transition probabilities to death are 0, life expectancy must equal the time horizon (`n_cycles`).
+- **Treatment Arm Equivalence & Symmetry**:
+  - Setting all treatment parameters equal across arms ($\theta_a = \theta_b$) must produce equal costs and QALYs.
+  - Modifying individual parameters ($\theta_a \neq \theta_b$) must alter model outcomes (verifying parameter wiring).
+  - Swapping treatment parameter vectors between arms ($\theta_a \leftrightarrow \theta_b$) must swap the cost and QALY outputs between those arms.
+- **PSA & Parameter Sampling Bounding**:
+  - Probabilistic sensitivity analysis (PSA) parameter draws must strictly adhere to the domain limits of their statistical distributions (e.g. Beta $\in [0,1]$, Lognormal $>0$).
 
 ## 2. Using `testhta` Validation Helpers
 
@@ -99,6 +105,44 @@ compare_model_runs(
 )
 ```
 
+### Treatment Arm & Symmetry Tests
+
+To verify that treatment arms behave symmetrically and parameter wiring is valid:
+
+```r
+# T14: Equal inputs produce equal outputs across treatment arms
+state_c_eq <- test_data$state_c_matrix
+state_c_eq["with_drug", ] <- state_c_eq["without_drug", ]
+
+state_q_eq <- test_data$state_q_matrix
+state_q_eq["with_drug", ] <- state_q_eq["without_drug", ]
+
+res_eq <- run_model(test_data, state_c_matrix = state_c_eq, state_q_matrix = state_q_eq)
+expect_equal(get_costs(res_eq)["with_drug"], get_costs(res_eq)["without_drug"])
+
+# T16: Swapping parameters between arms swaps output outcomes
+state_c_swap <- test_data$state_c_matrix
+state_c_swap[c("without_drug", "with_drug"), ] <- state_c_swap[c("with_drug", "without_drug"), ]
+
+res_swapped <- run_model(test_data, state_c_matrix = state_c_swap)
+expect_equal(get_costs(res_swapped)["without_drug"], get_costs(run_model(test_data))["with_drug"])
+```
+
+### Probabilistic (PSA) Parameter Sampling Tests
+
+To verify parameter distribution bounds before running PSA Monte Carlo simulations:
+
+```r
+# T13: Samples lie within statistical distribution bounds
+set.seed(123)
+n_samples <- 1000
+u_draws <- rbeta(n_samples, shape1 = 8, shape2 = 2)
+expect_true(all(u_draws >= 0 & u_draws <= 1))
+
+cost_draws <- rlnorm(n_samples, meanlog = 5, sdlog = 0.5)
+expect_true(all(cost_draws > 0))
+```
+
 ## 3. Integrating Validation into a Model Development Workflow
 
 When developing or modifying a health economic model, place your test files in the `tests/testthat/` directory of your R package.
@@ -120,6 +164,12 @@ test_that("economic logic holds for cohort markov model", {
   
   # Zero costs logic
   check_model_costs(expected_costs = 0, data = test_data, c_healthy = 0, c_sick = 0, c_intervention = 0, c_death = 0)
+  
+  # Arm equivalence logic
+  state_c_eq <- test_data$state_c_matrix
+  state_c_eq["with_drug", ] <- state_c_eq["without_drug", ]
+  res_eq <- run_model(test_data, state_c_matrix = state_c_eq)
+  expect_equal(get_costs(res_eq)["with_drug"], get_costs(res_eq)["without_drug"])
 })
 ```
 
@@ -130,3 +180,4 @@ devtools::test()
 ```
 
 This automates the verification process and acts as a safety net against accidental bugs when updating transitions, costs, or utility functions.
+

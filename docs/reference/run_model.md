@@ -20,4 +20,11 @@ run_model(data, ...)
 
 ## Value
 
-The model results.
+A list of model simulation results.
+
+## Examples
+
+``` r
+data(test_data)
+res <- run_model(test_data, discount_rate = 0.05)
+```

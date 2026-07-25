@@ -25,3 +25,11 @@ set_p_matrix(input, scenario, values)
 ## Value
 
 The modified list of parameters.
+
+## Examples
+
+``` r
+data(test_data)
+mat <- test_data$p_matrix[, , "without_drug"]
+updated <- set_p_matrix(test_data, "without_drug", mat)
+```

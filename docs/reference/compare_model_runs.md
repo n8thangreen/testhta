@@ -28,13 +28,13 @@ compare_model_runs(
 - params_1:
 
   List of parameters for the first
-  [`run_model()`](https://n8thangreen.github.io/testhta/reference/run_model.md)
+  [`run_model()`](https://validate-hta.github.io/testhta/reference/run_model.md)
   call.
 
 - params_2:
 
   List of parameters for the second
-  [`run_model()`](https://n8thangreen.github.io/testhta/reference/run_model.md)
+  [`run_model()`](https://validate-hta.github.io/testhta/reference/run_model.md)
   call.
 
 - data:
@@ -44,3 +44,21 @@ compare_model_runs(
 - label:
 
   A label for the test, passed to the comparison function.
+
+## Value
+
+None, called for side effects (testthat assertion).
+
+## Examples
+
+``` r
+library(testthat)
+data(test_data)
+compare_model_runs(
+  extractor_fn = get_qalys,
+  comparison_fn = expect_lt,
+  params_1 = list(discount_rate = 0.035),
+  params_2 = list(discount_rate = 0),
+  data = test_data
+)
+```

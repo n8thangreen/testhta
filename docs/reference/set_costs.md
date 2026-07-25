@@ -25,3 +25,10 @@ set_costs(input, scenario, values)
 ## Value
 
 The modified list of parameters.
+
+## Examples
+
+``` r
+data(test_data)
+updated <- set_costs(test_data, "without_drug", c(100, 200, 0))
+```

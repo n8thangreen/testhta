@@ -24,16 +24,16 @@ results.
 
 - 🧪 **Verification Helpers**: Out-of-the-box functions to test model
   behavior against expected bounds
-  ([`check_model_qalys()`](https://n8thangreen.github.io/testhta/reference/check_model_qalys.md),
-  [`check_model_costs()`](https://n8thangreen.github.io/testhta/reference/check_model_costs.md),
-  [`check_model_le()`](https://n8thangreen.github.io/testhta/reference/check_model_le.md)).
+  ([`check_model_qalys()`](https://validate-hta.github.io/testhta/reference/check_model_qalys.md),
+  [`check_model_costs()`](https://validate-hta.github.io/testhta/reference/check_model_costs.md),
+  [`check_model_le()`](https://validate-hta.github.io/testhta/reference/check_model_le.md)).
 - 🔄 **Relational Comparators**: Compare model behaviors across
   parameter spaces using
-  [`compare_model_runs()`](https://n8thangreen.github.io/testhta/reference/compare_model_runs.md)
+  [`compare_model_runs()`](https://validate-hta.github.io/testhta/reference/compare_model_runs.md)
   (e.g., verifying that discounting reduces future values).
 - 🔗 **Tidy Test API**: Modify parameters cleanly using setter functions
-  ([`set_discount_rate()`](https://n8thangreen.github.io/testhta/reference/set_discount_rate.md),
-  [`set_time_horizon()`](https://n8thangreen.github.io/testhta/reference/set_time_horizon.md))
+  ([`set_discount_rate()`](https://validate-hta.github.io/testhta/reference/set_discount_rate.md),
+  [`set_time_horizon()`](https://validate-hta.github.io/testhta/reference/set_time_horizon.md))
   integrated with the base R pipe (`|>`) to isolate test runs.
 - ⚙️ **Markov Engine Example Case Study**: An example discrete-time
   cohort Markov simulation environment built with time-dependent
@@ -134,14 +134,24 @@ verification methodologies described by Tappenden et al. (2014) and
 Elbasha & Dasbach (2017). The framework checks “black-box” model
 behavior under extreme inputs to identify structural bugs:
 
-| Test Case | Boundary Condition | Expected Behavior | Verification Helper |
-|:---|:---|:---|:---|
-| **QALY Zeroing** | Set all utilities to `0` | QALYs must equal `0` | `check_model_qalys(0, ...)` |
-| **QALY Upper Bound** | Set utilities to `1`, discount to `0` | QALYs must equal Life Expectancy | `expect_equal(get_qalys(r), get_le(r))` |
-| **Discount Sensitivity** | High discount rate vs Low discount rate | High discount rate must yield lower values | `compare_model_runs(..., expect_lt)` |
-| **Absorbing States** | Transition to death state set to `1` | Life Expectancy must equal `1` cycle | `check_model_le(1, ...)` |
-| **No-Death Horizon** | Transition to death state set to `0` | Life Expectancy must equal `n_cycles` | `check_model_le(n_cycles, ...)` |
-| **Zero-Cost Bounding** | Set all costs to `0` | Total costs must equal `0` | `check_model_costs(0, ...)` |
+| Group | Test Case ID | Boundary / Verification Condition | Expected Behavior | Verification Helper / Code |
+|:---|:---|:---|:---|:---|
+| **QALY Bounding** | **T01** | Set discount rate to `100%` (`discount_rate = 1`) | QALYs must equal `0` | `check_model_qalys(0, ...)` |
+| **QALY Bounding** | **T02** | Set utilities to `1`, discount to `0` | QALYs must equal Life Expectancy | `expect_equal(get_qalys(r), get_le(r))` |
+| **QALY Bounding** | **T06** | Set utilities for living states to `1` | QALY gains equal Life-Years (LYGs) | `expect_equal(get_qalys(r), r$total_LYs)` |
+| **QALY Bounding** | **T07** | Standard discounting vs. undiscounted | Discounted QALYs strictly less than undiscounted | `compare_model_runs(..., expect_lt)` |
+| **QALY Bounding** | **T08** | Infinite discount rate (`discount_rate = 1000`) | QALYs tend to zero | `check_model_qalys(0, ...)` |
+| **Cost Bounding** | **T06** | Set all cost parameters to `0` | Total costs must equal `0` | `check_model_costs(0, ...)` |
+| **Cost Bounding** | **T09** | Set intervention costs to `0` | ICER is reduced | `compare_model_runs(get_icer, expect_lt)` |
+| **Cost Bounding** | **T10** | Increase intervention costs | ICER is increased | `compare_model_runs(get_icer, expect_gt)` |
+| **Cost Bounding** | **T11** | Zero cost discount rate (`discount_rate = 0`) | Discounted costs equal undiscounted costs | `compare_model_runs(get_costs, expect_equal)` |
+| **Cost Bounding** | **T12** | Infinite cost discount rate (`discount_rate = 1000`) | Costs tend to zero | `check_model_costs(0, ...)` |
+| **Population / LE** | **T05** | Transition to death state set to `1` | Life Expectancy must equal `1` cycle | `check_model_le(1, ...)` |
+| **Population / LE** | **T04** | Transition to death state set to `0` | Life Expectancy equals `n_cycles` | `check_model_le(n_cycles, ...)` |
+| **Treatment Arm** | **T14** | Set all treatment parameters equal ($`\theta_a = \theta_b`$) | Costs and QALYs equal across arms | `expect_equal(costs["with_drug"], costs["without_drug"])` |
+| **Treatment Arm** | **T15** | Amend individual model parameter ($`\theta_a \neq \theta_b`$) | ICER is modified (verifies parameter sensitivity) | `compare_model_runs(get_icer, expect_false)` |
+| **Treatment Arm** | **T16** | Swap treatment-specific parameters ($`\theta_a \leftrightarrow \theta_b`$) | QALYs and costs swap between arms | `expect_equal(costs_swapped["arm1"], costs_base["arm2"])` |
+| **PSA / Sampling** | **T13** | Draw $`n`$ samples from parameter distributions | All drawn values satisfy domain bounds (e.g. Beta $`\in [0,1]`$, Lognormal $`>0`$) | `expect_true(all(u >= 0 & u <= 1))` |
 
 ------------------------------------------------------------------------
 
@@ -167,15 +177,15 @@ behavior under extreme inputs to identify structural bugs:
 Exported assertion functions to write automated unit tests and check
 model boundaries.
 
-- [`run_model()`](https://n8thangreen.github.io/testhta/reference/run_model.md)
+- [`run_model()`](https://validate-hta.github.io/testhta/reference/run_model.md)
   : Run Markov model with parameters and overrides
-- [`check_model_qalys()`](https://n8thangreen.github.io/testhta/reference/check_model_qalys.md)
+- [`check_model_qalys()`](https://validate-hta.github.io/testhta/reference/check_model_qalys.md)
   : Run model and check QALYs against an expected value
-- [`check_model_costs()`](https://n8thangreen.github.io/testhta/reference/check_model_costs.md)
+- [`check_model_costs()`](https://validate-hta.github.io/testhta/reference/check_model_costs.md)
   : Run model and check Costs against an expected value
-- [`check_model_le()`](https://n8thangreen.github.io/testhta/reference/check_model_le.md)
+- [`check_model_le()`](https://validate-hta.github.io/testhta/reference/check_model_le.md)
   : Run model and check Life Expectancy against an expected value
-- [`compare_model_runs()`](https://n8thangreen.github.io/testhta/reference/compare_model_runs.md)
+- [`compare_model_runs()`](https://validate-hta.github.io/testhta/reference/compare_model_runs.md)
   : Compare model outputs from two different parameter sets
 
 ## Model Setters & Getters
@@ -183,23 +193,23 @@ model boundaries.
 Helper functions to modify input parameters and extract outcomes during
 test execution.
 
-- [`set_discount_rate()`](https://n8thangreen.github.io/testhta/reference/set_discount_rate.md)
+- [`set_discount_rate()`](https://validate-hta.github.io/testhta/reference/set_discount_rate.md)
   : Set discount rate
-- [`set_costs()`](https://n8thangreen.github.io/testhta/reference/set_costs.md)
+- [`set_costs()`](https://validate-hta.github.io/testhta/reference/set_costs.md)
   : Set costs for a scenario
-- [`set_p_matrix()`](https://n8thangreen.github.io/testhta/reference/set_p_matrix.md)
+- [`set_p_matrix()`](https://validate-hta.github.io/testhta/reference/set_p_matrix.md)
   : Set transition probabilities for a scenario
-- [`set_utilities()`](https://n8thangreen.github.io/testhta/reference/set_utilities.md)
+- [`set_utilities()`](https://validate-hta.github.io/testhta/reference/set_utilities.md)
   : Set utilities for a scenario
-- [`set_time_horizon()`](https://n8thangreen.github.io/testhta/reference/set_time_horizon.md)
+- [`set_time_horizon()`](https://validate-hta.github.io/testhta/reference/set_time_horizon.md)
   : Set time horizon
-- [`get_qalys()`](https://n8thangreen.github.io/testhta/reference/get_qalys.md)
+- [`get_qalys()`](https://validate-hta.github.io/testhta/reference/get_qalys.md)
   : Getter for QALYs
-- [`get_costs()`](https://n8thangreen.github.io/testhta/reference/get_costs.md)
+- [`get_costs()`](https://validate-hta.github.io/testhta/reference/get_costs.md)
   : Getter for costs
-- [`get_le()`](https://n8thangreen.github.io/testhta/reference/get_le.md)
+- [`get_le()`](https://validate-hta.github.io/testhta/reference/get_le.md)
   : Getter for life expectancy (LE)
-- [`get_icer()`](https://n8thangreen.github.io/testhta/reference/get_icer.md)
+- [`get_icer()`](https://validate-hta.github.io/testhta/reference/get_icer.md)
   : Getter for ICER
 
 ## Example Case Study Model
@@ -207,11 +217,11 @@ test execution.
 The cohort Markov model engine used as the demonstration environment for
 these testing tools.
 
-- [`ce_markov()`](https://n8thangreen.github.io/testhta/reference/ce_markov.md)
+- [`ce_markov()`](https://validate-hta.github.io/testhta/reference/ce_markov.md)
   : run cost-effectiveness model
-- [`p_matrix_cycle()`](https://n8thangreen.github.io/testhta/reference/p_matrix_cycle.md)
+- [`p_matrix_cycle()`](https://validate-hta.github.io/testhta/reference/p_matrix_cycle.md)
   : Time-dependent probability matrix
-- [`test_data`](https://n8thangreen.github.io/testhta/reference/test_data.md)
+- [`test_data`](https://validate-hta.github.io/testhta/reference/test_data.md)
   : Standard baseline parameters for cost-effectiveness testing
 
 # Articles
@@ -219,8 +229,8 @@ these testing tools.
 ### All vignettes
 
 - [Writing Basic Bounding
-  Tests](https://n8thangreen.github.io/testhta/articles/basic-tests.md):
+  Tests](https://validate-hta.github.io/testhta/articles/basic-tests.md):
 - [Introduction to
-  testhta](https://n8thangreen.github.io/testhta/articles/introduction.md):
+  testhta](https://validate-hta.github.io/testhta/articles/introduction.md):
 - [Model Validation and Verification
-  Guide](https://n8thangreen.github.io/testhta/articles/validation-guide.md):
+  Guide](https://validate-hta.github.io/testhta/articles/validation-guide.md):
