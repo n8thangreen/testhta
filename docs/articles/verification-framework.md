@@ -1,0 +1,123 @@
+# The HTA Verification Framework
+
+``` r
+
+library(testhta)
+library(testthat)
+```
+
+## Overview
+
+Health Technology Assessment (HTA) models inform critical healthcare
+coverage, pricing, and clinical policy decisions. However, complex
+decision-analytic models are prone to structural bugs, indexing errors,
+and hidden parameter miswirings.
+
+The **HTA Verification Framework** in `testhta` provides a
+software-engineering-inspired methodology for formal model verification.
+Based on seminal frameworks by **Tappenden & Chilcott (2014)** and
+**Elbasha & Dasbach (2017)**, the framework applies automated
+“black-box” unit tests to verify that model code strictly behaves
+according to expected mathematical and economic boundary conditions.
+
+------------------------------------------------------------------------
+
+## Verification Test Registry (T01 – T16)
+
+The framework organizes 16 automated verification test cases into five
+distinct logical categories:
+
+### 1. QALY Bounding Tests
+
+These tests assert quality-adjusted life year (QALY) calculations under
+extreme discount rates and boundary utility weights: - **T01 (Extreme
+Discounting 100%)**: Setting `discount_rate = 1` zeroes out future
+cycles, yielding total QALYs = 0. - **T02 (Upper Bound QALYs)**: Setting
+state utilities = 1 with zero discounting (`discount_rate = 0`) forces
+QALYs to equal total undiscounted Life Expectancy (LE). - **T06
+(Utility-1 Scaling)**: Setting state utilities = 1 yields QALY gains
+equal to Life-Years (LYGs). - **T07 (Discount Directionality)**:
+Standard discounting (e.g. 3.5%) strictly reduces QALYs compared to
+undiscounted runs. - **T08 (Infinite Discounting)**: Infinite discount
+rates (`discount_rate = 1000`) drive future QALY gains to zero.
+
+### 2. Cost Bounding & Sensitivity Tests
+
+These tests check cost accumulation logic and parameter sensitivity: -
+**T06 (Zero Cost Bounding)**: Setting all health state occupancy,
+transition, and intervention costs to 0 must output total costs of 0. -
+**T09 (Zero Intervention Cost)**: Removing intervention costs strictly
+reduces the Incremental Cost-Effectiveness Ratio (ICER). - **T10
+(Increased Intervention Cost)**: Increasing intervention cost strictly
+increases the ICER. - **T11 (Zero Cost Discounting)**: A zero cost
+discount rate ensures discounted costs equal undiscounted costs. - **T12
+(Infinite Cost Discounting)**: An infinite cost discount rate reduces
+future costs to zero.
+
+### 3. Population & Life Expectancy Bounding Tests
+
+These tests verify cohort flow across state transitions: - **T05
+(Absolute Mortality)**: Setting death transition probability = 1 forces
+the cohort to die immediately, yielding Life Expectancy = 1 cycle. -
+**T04 (Zero Mortality)**: Setting death transition probability = 0
+ensures full cohort survival, yielding Life Expectancy equal to the full
+time horizon (`n_cycles`).
+
+### 4. Treatment Arm Comparison & Symmetry Tests
+
+These tests verify parameter wiring and symmetry across model arms: -
+**T14 (Arm Parameter Equivalence)**: Setting all treatment-specific
+parameters equal across arms ($`\theta_a = \theta_b`$) yields identical
+costs and QALYs (zero incremental outcomes). - **T15 (Parameter
+Sensitivity Sweep)**: Modifying an individual parameter for a treatment
+arm ($`\theta_a \neq \theta_b`$) must alter the ICER, confirming
+parameter wiring. - **T16 (Arm Parameter Swapping)**: Swapping parameter
+vectors between arms ($`\theta_a \leftrightarrow \theta_b`$) swaps
+output costs and QALYs between those arms.
+
+### 5. Probabilistic Sensitivity Analysis (PSA) Sampling Tests
+
+These tests check parameter distribution limits before running Monte
+Carlo simulations: - **T13 (Distribution Bounding)**: Verifies that PSA
+parameter draws strictly lie within theoretical domain limits (e.g.,
+Beta utilities/probabilities $`\in [0, 1]`$, Lognormal costs $`> 0`$).
+
+------------------------------------------------------------------------
+
+## Verification Test Summary Matrix
+
+| Group | Test Case ID | Boundary / Verification Condition | Expected Behavior | Verification Helper / Code |
+|:---|:---|:---|:---|:---|
+| **QALY Bounding** | **T01** | Set discount rate to `100%` (`discount_rate = 1`) | QALYs must equal `0` | `check_model_qalys(0, ...)` |
+| **QALY Bounding** | **T02** | Set utilities to `1`, discount to `0` | QALYs must equal Life Expectancy | `expect_equal(get_qalys(r), get_le(r))` |
+| **QALY Bounding** | **T06** | Set utilities for living states to `1` | QALY gains equal Life-Years (LYGs) | `expect_equal(get_qalys(r), r$total_LYs)` |
+| **QALY Bounding** | **T07** | Standard discounting vs. undiscounted | Discounted QALYs strictly less than undiscounted | `compare_model_runs(..., expect_lt)` |
+| **QALY Bounding** | **T08** | Infinite discount rate (`discount_rate = 1000`) | QALYs tend to zero | `check_model_qalys(0, ...)` |
+| **Cost Bounding** | **T06** | Set all cost parameters to `0` | Total costs must equal `0` | `check_model_costs(0, ...)` |
+| **Cost Bounding** | **T09** | Set intervention costs to `0` | ICER is reduced | `compare_model_runs(get_icer, expect_lt)` |
+| **Cost Bounding** | **T10** | Increase intervention costs | ICER is increased | `compare_model_runs(get_icer, expect_gt)` |
+| **Cost Bounding** | **T11** | Zero cost discount rate (`discount_rate = 0`) | Discounted costs equal undiscounted costs | `compare_model_runs(get_costs, expect_equal)` |
+| **Cost Bounding** | **T12** | Infinite cost discount rate (`discount_rate = 1000`) | Costs tend to zero | `check_model_costs(0, ...)` |
+| **Population / LE** | **T05** | Transition to death state set to `1` | Life Expectancy must equal `1` cycle | `check_model_le(1, ...)` |
+| **Population / LE** | **T04** | Transition to death state set to `0` | Life Expectancy equals `n_cycles` | `check_model_le(n_cycles, ...)` |
+| **Treatment Arm** | **T14** | Set all treatment parameters equal ($`\theta_a = \theta_b`$) | Costs and QALYs equal across arms | `expect_equal(get_incremental_costs(r), 0)` |
+| **Treatment Arm** | **T15** | Amend individual model parameter ($`\theta_a \neq \theta_b`$) | ICER is modified (verifies parameter sensitivity) | `compare_model_runs(get_icer, expect_false)` |
+| **Treatment Arm** | **T16** | Swap treatment-specific parameters ($`\theta_a \leftrightarrow \theta_b`$) | QALYs and costs swap between arms | `expect_equal(costs_swapped["arm1"], costs_base["arm2"])` |
+| **PSA / Sampling** | **T13** | Draw $`n`$ samples from parameter distributions | All drawn values satisfy domain bounds (e.g. Beta $`\in [0,1]`$, Lognormal $`>0`$) | `expect_true(all(u >= 0 & u <= 1))` |
+
+------------------------------------------------------------------------
+
+## References
+
+1.  **Tappenden, P., & Chilcott, J. B.** (2014). Avoiding and
+    Identifying Errors and Other Threats to the Credibility of Health
+    Economic Models. *PharmacoEconomics*, 32, 967–979.
+    <https://doi.org/10.1007/s40273-014-0186-2>
+2.  **Elbasha, E. H., & Dasbach, E. J.** (2017). Verification of
+    Decision-Analytic Models for Health Economic Evaluations: An
+    Overview. *PharmacoEconomics*, 35, 673–683.
+    <https://doi.org/10.1007/s40273-017-0508-2>
+3.  **Alarid-Escudero, F., et al.** (2019). A Need for Change! A Coding
+    Framework for Improving Transparency in Decision Modeling.
+    *PharmacoEconomics*, 37(11), 1329–1339.
+    <https://doi.org/10.1007/s40273-019-00837-x>

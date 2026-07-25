@@ -8,3 +8,5 @@
   testhta](https://validate-hta.github.io/testhta/articles/introduction.md):
 - [Model Validation and Verification
   Guide](https://validate-hta.github.io/testhta/articles/validation-guide.md):
+- [The HTA Verification
+  Framework](https://validate-hta.github.io/testhta/articles/verification-framework.md):

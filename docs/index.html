@@ -44,6 +44,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-guides">
 <li><a class="dropdown-item" href="articles/basic-tests.html">Writing Basic Bounding Tests</a></li>
     <li><a class="dropdown-item" href="articles/validation-guide.html">HTA Model Bounding &amp; Validation</a></li>
+    <li><a class="dropdown-item" href="articles/verification-framework.html">The HTA Verification Framework</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -154,146 +155,20 @@
 <div class="section level2">
 <h2 id="the-hta-verification-framework">The HTA Verification Framework<a class="anchor" aria-label="anchor" href="#the-hta-verification-framework"></a>
 </h2>
-<p>The validation checks in <code>testhta</code> are based on formal software verification methodologies described by Tappenden et al. (2014) and Elbasha &amp; Dasbach (2017). The framework checks “black-box” model behavior under extreme inputs to identify structural bugs:</p>
-<table class="table">
-<colgroup>
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
-</colgroup>
-<thead><tr>
-<th align="left">Group</th>
-<th align="left">Test Case ID</th>
-<th align="left">Boundary / Verification Condition</th>
-<th align="left">Expected Behavior</th>
-<th align="left">Verification Helper / Code</th>
-</tr></thead>
-<tbody>
-<tr>
-<td align="left"><strong>QALY Bounding</strong></td>
-<td align="left"><strong>T01</strong></td>
-<td align="left">Set discount rate to <code>100%</code> (<code>discount_rate = 1</code>)</td>
-<td align="left">QALYs must equal <code>0</code>
-</td>
-<td align="left"><code>check_model_qalys(0, ...)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>QALY Bounding</strong></td>
-<td align="left"><strong>T02</strong></td>
-<td align="left">Set utilities to <code>1</code>, discount to <code>0</code>
-</td>
-<td align="left">QALYs must equal Life Expectancy</td>
-<td align="left"><code>expect_equal(get_qalys(r), get_le(r))</code></td>
-</tr>
-<tr>
-<td align="left"><strong>QALY Bounding</strong></td>
-<td align="left"><strong>T06</strong></td>
-<td align="left">Set utilities for living states to <code>1</code>
-</td>
-<td align="left">QALY gains equal Life-Years (LYGs)</td>
-<td align="left"><code>expect_equal(get_qalys(r), r$total_LYs)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>QALY Bounding</strong></td>
-<td align="left"><strong>T07</strong></td>
-<td align="left">Standard discounting vs. undiscounted</td>
-<td align="left">Discounted QALYs strictly less than undiscounted</td>
-<td align="left"><code>compare_model_runs(..., expect_lt)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>QALY Bounding</strong></td>
-<td align="left"><strong>T08</strong></td>
-<td align="left">Infinite discount rate (<code>discount_rate = 1000</code>)</td>
-<td align="left">QALYs tend to zero</td>
-<td align="left"><code>check_model_qalys(0, ...)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Cost Bounding</strong></td>
-<td align="left"><strong>T06</strong></td>
-<td align="left">Set all cost parameters to <code>0</code>
-</td>
-<td align="left">Total costs must equal <code>0</code>
-</td>
-<td align="left"><code>check_model_costs(0, ...)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Cost Bounding</strong></td>
-<td align="left"><strong>T09</strong></td>
-<td align="left">Set intervention costs to <code>0</code>
-</td>
-<td align="left">ICER is reduced</td>
-<td align="left"><code>compare_model_runs(get_icer, expect_lt)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Cost Bounding</strong></td>
-<td align="left"><strong>T10</strong></td>
-<td align="left">Increase intervention costs</td>
-<td align="left">ICER is increased</td>
-<td align="left"><code>compare_model_runs(get_icer, expect_gt)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Cost Bounding</strong></td>
-<td align="left"><strong>T11</strong></td>
-<td align="left">Zero cost discount rate (<code>discount_rate = 0</code>)</td>
-<td align="left">Discounted costs equal undiscounted costs</td>
-<td align="left"><code>compare_model_runs(get_costs, expect_equal)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Cost Bounding</strong></td>
-<td align="left"><strong>T12</strong></td>
-<td align="left">Infinite cost discount rate (<code>discount_rate = 1000</code>)</td>
-<td align="left">Costs tend to zero</td>
-<td align="left"><code>check_model_costs(0, ...)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Population / LE</strong></td>
-<td align="left"><strong>T05</strong></td>
-<td align="left">Transition to death state set to <code>1</code>
-</td>
-<td align="left">Life Expectancy must equal <code>1</code> cycle</td>
-<td align="left"><code>check_model_le(1, ...)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Population / LE</strong></td>
-<td align="left"><strong>T04</strong></td>
-<td align="left">Transition to death state set to <code>0</code>
-</td>
-<td align="left">Life Expectancy equals <code>n_cycles</code>
-</td>
-<td align="left"><code>check_model_le(n_cycles, ...)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Treatment Arm</strong></td>
-<td align="left"><strong>T14</strong></td>
-<td align="left">Set all treatment parameters equal (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>a</mi></msub><mo>=</mo><msub><mi>θ</mi><mi>b</mi></msub></mrow><annotation encoding="application/x-tex">\theta_a = \theta_b</annotation></semantics></math>)</td>
-<td align="left">Costs and QALYs equal across arms</td>
-<td align="left"><code>expect_equal(costs["with_drug"], costs["without_drug"])</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Treatment Arm</strong></td>
-<td align="left"><strong>T15</strong></td>
-<td align="left">Amend individual model parameter (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>a</mi></msub><mo>≠</mo><msub><mi>θ</mi><mi>b</mi></msub></mrow><annotation encoding="application/x-tex">\theta_a \neq \theta_b</annotation></semantics></math>)</td>
-<td align="left">ICER is modified (verifies parameter sensitivity)</td>
-<td align="left"><code>compare_model_runs(get_icer, expect_false)</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Treatment Arm</strong></td>
-<td align="left"><strong>T16</strong></td>
-<td align="left">Swap treatment-specific parameters (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>a</mi></msub><mo>↔</mo><msub><mi>θ</mi><mi>b</mi></msub></mrow><annotation encoding="application/x-tex">\theta_a \leftrightarrow \theta_b</annotation></semantics></math>)</td>
-<td align="left">QALYs and costs swap between arms</td>
-<td align="left"><code>expect_equal(costs_swapped["arm1"], costs_base["arm2"])</code></td>
-</tr>
-<tr>
-<td align="left"><strong>PSA / Sampling</strong></td>
-<td align="left"><strong>T13</strong></td>
-<td align="left">Draw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> samples from parameter distributions</td>
-<td align="left">All drawn values satisfy domain bounds (e.g. Beta <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\in [0,1]</annotation></semantics></math>, Lognormal <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">&gt;0</annotation></semantics></math>)</td>
-<td align="left"><code>expect_true(all(u &gt;= 0 &amp; u &lt;= 1))</code></td>
-</tr>
-</tbody>
-</table>
+<p>The validation checks in <code>testhta</code> are based on formal software verification methodologies described by Tappenden et al. (2014) and Elbasha &amp; Dasbach (2017). The framework checks “black-box” model behavior under extreme inputs to identify structural bugs across 16 core test scenarios (T01–T16), covering:</p>
+<ul>
+<li>
+<strong>QALY Bounding Tests</strong> (T01, T02, T06, T07, T08)</li>
+<li>
+<strong>Cost Bounding &amp; Sensitivity Tests</strong> (T06, T09, T10, T11, T12)</li>
+<li>
+<strong>Population &amp; Life Expectancy Bounding Tests</strong> (T04, T05)</li>
+<li>
+<strong>Treatment Arm Comparison &amp; Symmetry Tests</strong> (T14, T15, T16)</li>
+<li>
+<strong>Probabilistic Sensitivity Analysis (PSA) Sampling Tests</strong> (T13)</li>
+</ul>
+<p>For the complete test matrix, detailed descriptions, and code examples, see the dedicated <a href="https://validate-hta.github.io/testhta/articles/verification-framework.html"><strong>HTA Verification Framework Vignette</strong></a> (<code>vignettes/verification-framework.Rmd</code>).</p>
 <hr>
 </div>
 <div class="section level2">

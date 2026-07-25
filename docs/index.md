@@ -132,26 +132,19 @@ compare_model_runs(
 The validation checks in `testhta` are based on formal software
 verification methodologies described by Tappenden et al. (2014) and
 Elbasha & Dasbach (2017). The framework checks “black-box” model
-behavior under extreme inputs to identify structural bugs:
+behavior under extreme inputs to identify structural bugs across 16 core
+test scenarios (T01–T16), covering:
 
-| Group | Test Case ID | Boundary / Verification Condition | Expected Behavior | Verification Helper / Code |
-|:---|:---|:---|:---|:---|
-| **QALY Bounding** | **T01** | Set discount rate to `100%` (`discount_rate = 1`) | QALYs must equal `0` | `check_model_qalys(0, ...)` |
-| **QALY Bounding** | **T02** | Set utilities to `1`, discount to `0` | QALYs must equal Life Expectancy | `expect_equal(get_qalys(r), get_le(r))` |
-| **QALY Bounding** | **T06** | Set utilities for living states to `1` | QALY gains equal Life-Years (LYGs) | `expect_equal(get_qalys(r), r$total_LYs)` |
-| **QALY Bounding** | **T07** | Standard discounting vs. undiscounted | Discounted QALYs strictly less than undiscounted | `compare_model_runs(..., expect_lt)` |
-| **QALY Bounding** | **T08** | Infinite discount rate (`discount_rate = 1000`) | QALYs tend to zero | `check_model_qalys(0, ...)` |
-| **Cost Bounding** | **T06** | Set all cost parameters to `0` | Total costs must equal `0` | `check_model_costs(0, ...)` |
-| **Cost Bounding** | **T09** | Set intervention costs to `0` | ICER is reduced | `compare_model_runs(get_icer, expect_lt)` |
-| **Cost Bounding** | **T10** | Increase intervention costs | ICER is increased | `compare_model_runs(get_icer, expect_gt)` |
-| **Cost Bounding** | **T11** | Zero cost discount rate (`discount_rate = 0`) | Discounted costs equal undiscounted costs | `compare_model_runs(get_costs, expect_equal)` |
-| **Cost Bounding** | **T12** | Infinite cost discount rate (`discount_rate = 1000`) | Costs tend to zero | `check_model_costs(0, ...)` |
-| **Population / LE** | **T05** | Transition to death state set to `1` | Life Expectancy must equal `1` cycle | `check_model_le(1, ...)` |
-| **Population / LE** | **T04** | Transition to death state set to `0` | Life Expectancy equals `n_cycles` | `check_model_le(n_cycles, ...)` |
-| **Treatment Arm** | **T14** | Set all treatment parameters equal ($`\theta_a = \theta_b`$) | Costs and QALYs equal across arms | `expect_equal(costs["with_drug"], costs["without_drug"])` |
-| **Treatment Arm** | **T15** | Amend individual model parameter ($`\theta_a \neq \theta_b`$) | ICER is modified (verifies parameter sensitivity) | `compare_model_runs(get_icer, expect_false)` |
-| **Treatment Arm** | **T16** | Swap treatment-specific parameters ($`\theta_a \leftrightarrow \theta_b`$) | QALYs and costs swap between arms | `expect_equal(costs_swapped["arm1"], costs_base["arm2"])` |
-| **PSA / Sampling** | **T13** | Draw $`n`$ samples from parameter distributions | All drawn values satisfy domain bounds (e.g. Beta $`\in [0,1]`$, Lognormal $`>0`$) | `expect_true(all(u >= 0 & u <= 1))` |
+- **QALY Bounding Tests** (T01, T02, T06, T07, T08)
+- **Cost Bounding & Sensitivity Tests** (T06, T09, T10, T11, T12)
+- **Population & Life Expectancy Bounding Tests** (T04, T05)
+- **Treatment Arm Comparison & Symmetry Tests** (T14, T15, T16)
+- **Probabilistic Sensitivity Analysis (PSA) Sampling Tests** (T13)
+
+For the complete test matrix, detailed descriptions, and code examples,
+see the dedicated [**HTA Verification Framework
+Vignette**](https://validate-hta.github.io/testhta/articles/verification-framework.html)
+(`vignettes/verification-framework.Rmd`).
 
 ------------------------------------------------------------------------
 

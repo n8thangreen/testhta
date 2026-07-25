@@ -5,7 +5,8 @@ articles:
   basic-tests: basic-tests.html
   introduction: introduction.html
   validation-guide: validation-guide.html
-last_built: 2026-07-25T10:28Z
+  verification-framework: verification-framework.html
+last_built: 2026-07-25T13:58Z
 urls:
   reference: https://validate-hta.github.io/testhta/reference
   article: https://validate-hta.github.io/testhta/articles

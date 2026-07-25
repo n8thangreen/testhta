@@ -18,6 +18,8 @@ navbar:
           href: articles/basic-tests.html
         - text: "HTA Model Bounding & Validation"
           href: articles/validation-guide.html
+        - text: "The HTA Verification Framework"
+          href: articles/verification-framework.html
 
 reference:
   - title: "Model Validation & Verification Helpers"
