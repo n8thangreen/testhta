@@ -1,5 +1,13 @@
 # Package index
 
+## Test Suite Generator
+
+Scaffolding functions to automatically generate unit testing
+infrastructure for HTA models.
+
+- [`use_hta_unittests()`](https://validate-hta.github.io/testhta/reference/use_hta_unittests.md)
+  : Generate Skeleton Unit Tests for HTA Models
+
 ## Model Validation & Verification Helpers
 
 Exported assertion functions to write automated unit tests and check

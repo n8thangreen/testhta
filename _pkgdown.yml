@@ -20,8 +20,14 @@ navbar:
           href: articles/validation-guide.html
         - text: "The HTA Verification Framework"
           href: articles/verification-framework.html
+        - text: "Automating HTA Model Validation with Unit Tests"
+          href: articles/automating-hta-unit-tests.html
 
 reference:
+  - title: "Test Suite Generator"
+    desc: "Scaffolding functions to automatically generate unit testing infrastructure for HTA models."
+    contents:
+      - use_hta_unittests
   - title: "Model Validation & Verification Helpers"
     desc: "Exported assertion functions to write automated unit tests and check model boundaries."
     contents:

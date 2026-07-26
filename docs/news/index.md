@@ -16,6 +16,11 @@
     Retrieve total Life Expectancy.
   - [`get_qalys()`](https://validate-hta.github.io/testhta/reference/get_qalys.md):
     Retrieve total discounted Quality-Adjusted Life Years.
+- Added
+  [`use_hta_unittests()`](https://validate-hta.github.io/testhta/reference/use_hta_unittests.md)
+  to automatically generate testthat directory structures and
+  pre-configured unit test scripts aligned with the HTA Verification
+  Registry (T01 - T16).
 - Added piping-compatible setters to dynamically override model
   parameters:
   - [`set_costs()`](https://validate-hta.github.io/testhta/reference/set_costs.md):
@@ -52,10 +57,12 @@
   Bootstrap 5 `flatly` Bootswatch theme.
 - Added comprehensive documentation website search index.
 - Added a stylized hexagon logo (`man/figures/logo.png`).
-- Added two introductory and guide vignettes:
+- Added introductory and guide vignettes:
   - `introduction`: Setup, execute, and inspect Markov
     cost-effectiveness models.
   - `validation-guide`: How to design and run unit tests to verify model
     logic under boundaries.
+  - `automating-hta-unit-tests`: Scaffolding and automating HTA model
+    unit tests.
 - Overhauled package metadata (DESCRIPTION, URLs, BugReports, and
   License).

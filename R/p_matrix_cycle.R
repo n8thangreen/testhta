@@ -49,8 +49,23 @@ p_matrix_cycle <- function(p_matrix, age, cycle,
     tpProg_dead_with <- p_sick_death
   }
 
-  tpProg_cycle_without <- tpProg * cycle
-  tpProg_cycle_with <- tpProg * (1 - effect) * cycle
+  # Determine treatment effect for without_drug and with_drug based on input p_matrix
+  p_without <- p_matrix["Asymptomatic_disease", "Progressive_disease", "without_drug"]
+  p_with <- p_matrix["Asymptomatic_disease", "Progressive_disease", "with_drug"]
+  
+  if (isTRUE(all.equal(p_without, p_with))) {
+    eff_without <- 0
+    eff_with <- 0
+  } else if (p_without < p_with) {
+    eff_without <- effect
+    eff_with <- 0
+  } else {
+    eff_without <- 0
+    eff_with <- effect
+  }
+
+  tpProg_cycle_without <- tpProg * (1 - eff_without) * cycle
+  tpProg_cycle_with <- tpProg * (1 - eff_with) * cycle
 
   if (tpDn == 1) {
     tpProg_cycle_without <- 0

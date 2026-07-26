@@ -9,6 +9,7 @@
   - `get_icer()`: Calculate Incremental Cost-Effectiveness Ratio.
   - `get_le()`: Retrieve total Life Expectancy.
   - `get_qalys()`: Retrieve total discounted Quality-Adjusted Life Years.
+- Added `use_hta_unittests()` to automatically generate testthat directory structures and pre-configured unit test scripts aligned with the HTA Verification Registry (T01 - T16).
 - Added piping-compatible setters to dynamically override model parameters:
   - `set_costs()`: Modify state-occupancy costs.
   - `set_discount_rate()`: Modify model discount rates.
@@ -30,7 +31,8 @@
 - Created a professional `pkgdown` documentation website using the Bootstrap 5 `flatly` Bootswatch theme.
 - Added comprehensive documentation website search index.
 - Added a stylized hexagon logo (`man/figures/logo.png`).
-- Added two introductory and guide vignettes:
+- Added introductory and guide vignettes:
   - `introduction`: Setup, execute, and inspect Markov cost-effectiveness models.
   - `validation-guide`: How to design and run unit tests to verify model logic under boundaries.
+  - `automating-hta-unit-tests`: Scaffolding and automating HTA model unit tests.
 - Overhauled package metadata (DESCRIPTION, URLs, BugReports, and License).

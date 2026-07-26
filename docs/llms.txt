@@ -165,6 +165,14 @@ Vignette**](https://validate-hta.github.io/testhta/articles/verification-framewo
 
 # Package index
 
+## Test Suite Generator
+
+Scaffolding functions to automatically generate unit testing
+infrastructure for HTA models.
+
+- [`use_hta_unittests()`](https://validate-hta.github.io/testhta/reference/use_hta_unittests.md)
+  : Generate Skeleton Unit Tests for HTA Models
+
 ## Model Validation & Verification Helpers
 
 Exported assertion functions to write automated unit tests and check
@@ -233,6 +241,8 @@ these testing tools.
 
 ### All vignettes
 
+- [Automating HTA Model Validation with Unit
+  Tests](https://validate-hta.github.io/testhta/articles/automating-hta-unit-tests.md):
 - [Writing Basic Bounding
   Tests](https://validate-hta.github.io/testhta/articles/basic-tests.md):
 - [Introduction to

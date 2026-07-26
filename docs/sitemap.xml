@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://validate-hta.github.io/testhta/404.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/articles/automating-hta-unit-tests.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/articles/basic-tests.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/articles/index.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/articles/introduction.html</loc></url>
@@ -34,5 +35,6 @@
 <url><loc>https://validate-hta.github.io/testhta/reference/set_utilities.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/swap_arm_params.html</loc></url>
 <url><loc>https://validate-hta.github.io/testhta/reference/test_data.html</loc></url>
+<url><loc>https://validate-hta.github.io/testhta/reference/use_hta_unittests.html</loc></url>
 </urlset>
 

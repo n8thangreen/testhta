@@ -2,6 +2,8 @@
 
 ### All vignettes
 
+- [Automating HTA Model Validation with Unit
+  Tests](https://validate-hta.github.io/testhta/articles/automating-hta-unit-tests.md):
 - [Writing Basic Bounding
   Tests](https://validate-hta.github.io/testhta/articles/basic-tests.md):
 - [Introduction to
